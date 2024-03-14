@@ -1,0 +1,27 @@
+version: "25.0.3"
+services:  
+  postgres:
+    image: 'postgres:latest'
+    environment:
+      - 'POSTGRES_DB=accounts_db'
+      - 'POSTGRES_PASSWORD=c2VjcmV0'
+      - 'POSTGRES_USER=myuser'
+    ports:
+      - '5434:5432'
+  java_api_finanacial:
+    image: 'microfinanzas'
+    restart: always
+    container_name: 'java_api_financial'
+    build: .
+    environment:
+      - DATABASE_URL = jdbc:postgresql://postgres:5432/accounts_db
+      - DATABASE_USERNAME = 'myuser'
+      - DATABASE_PASSWORD = 'c2VjcmV0'
+    ports:
+      - '9001:2001'
+    depends_on:
+      - postgres
+    links:
+      - postgres
+  
+    
