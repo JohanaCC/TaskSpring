@@ -3,9 +3,10 @@ import java.text.ParseException;
 import java.util.List;
 
 import com.manager.dto.ReporteDTO;
+import com.manager.dto.ResponseReport;
 
 public interface IReporteService {
 
-   List<ReporteDTO> getReport(String startDate, String endDate, int clientId) throws ParseException;
+	public ResponseReport getReport(String startDate, String endDate, int clientId) throws ParseException;
 
 }

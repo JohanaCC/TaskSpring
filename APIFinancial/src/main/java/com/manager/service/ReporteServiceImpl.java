@@ -10,9 +10,11 @@ import java.util.ArrayList;
 
 import com.manager.dto.ClienteDTO;
 import com.manager.dto.ReporteDTO;
+import com.manager.dto.ResponseReport;
 import com.manager.integration.ClienteFeignClient;
 import com.manager.model.Movimiento;
 import com.manager.repository.IMovimientoRep;
+import com.manager.util.Constants;
 
 @Service
 public class ReporteServiceImpl implements IReporteService {
@@ -26,9 +28,9 @@ public class ReporteServiceImpl implements IReporteService {
     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
     @Override
-    public List<ReporteDTO> getReport(String startDate, String endDate, int clientId) throws ParseException {
+    public ResponseReport getReport(String startDate, String endDate, int clientId) throws ParseException {
 
-
+    	ResponseReport response = new ResponseReport();
         List<Movimiento> movementFiltered = movimienteRep.findByDateBetween(sdf.parse(startDate), sdf.parse(endDate)).stream()
                 .filter(movement -> movement.getCuenta().getClienteId()==clientId ).toList();
 
@@ -48,7 +50,10 @@ public class ReporteServiceImpl implements IReporteService {
                     .build();
             reportList.add(reportDto);
         });
+        response.setCode(Constants.OK);
+        response.setMessage(Constants.OK_MSG);
+        response.setReportList(reportList);
 
-        return reportList;
+        return response;
     }
 }
