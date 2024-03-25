@@ -48,13 +48,13 @@ public class ClienteController {
         return new ResponseEntity<Response>(clienteService.eliminar(clienteid), HttpStatus.OK);
     }
     
-    @GetMapping("/clientes/{clienteId}")
+    @GetMapping("/{clienteId}")
     public ResponseEntity<ResponseCliente> getClienteById(@PathVariable("clienteId") int clienteId) {
-    	return new ResponseEntity<ResponseCliente>(clienteService.getAll(), HttpStatus.OK);
+    	return new ResponseEntity<ResponseCliente>(clienteService.getClienteById(clienteId), HttpStatus.OK);
     }
     
-    @GetMapping("/clientes/{nombre}")
-    public ResponseEntity<ResponseCliente> getClienteByNombre(@PathVariable("clienteId") String nombre) {
-    	return new ResponseEntity<ResponseCliente>(clienteService.getAll(), HttpStatus.OK);
+    @GetMapping("/byNombre/{nombre}")
+    public ResponseEntity<ResponseCliente> getClienteByNombre(@PathVariable("nombre") String nombre) {
+    	return new ResponseEntity<ResponseCliente>(clienteService.getClienteByNombre(nombre), HttpStatus.OK);
     }
 }

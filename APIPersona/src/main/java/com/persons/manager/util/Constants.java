@@ -12,6 +12,8 @@ public class Constants {
 	public static final String RECORD_INACTIVE = "106";
 	public static final String WRONG_FORMAT = "501";
 	public static final String NOT_ALLOWED = "502";
+	public static final String WRONG_DEFINITION = "503";
+
 	
 	//Mensajes de respuesta
 	public static final String INTERNAL_ERROR_SERVER_MSG = "Lo sentimos, problemas con el servidor.";
@@ -23,5 +25,6 @@ public class Constants {
 	public static final String RECORD_INACTIVE_MSG = "El registro se encuentra inactivo.";
 	public static final String WRONG_FORMAT_MSG = "Error en el formato de la solicitud. Por favor, verifica la estructura del JSON.";
 	public static final String NOT_ALLOWED_MSG = "Método HTTP no permitido para este recurso.";
+	public static final String WRONG_DEFINITION_MSG = "Falta una variable de ruta en la solicitud.";
 	
 }
