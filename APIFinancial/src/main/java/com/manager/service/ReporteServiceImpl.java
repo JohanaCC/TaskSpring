@@ -31,13 +31,13 @@ public class ReporteServiceImpl implements IReporteService {
     public ResponseReport getReport(String startDate, String endDate, int clientId) throws ParseException {
 
     	ResponseReport response = new ResponseReport();
-        List<Movimiento> movementFiltered = movimienteRep.findByDateBetween(sdf.parse(startDate), sdf.parse(endDate)).stream()
+        List<Movimiento> movementFiltered = movimienteRep.findByFechaBetween(sdf.parse(startDate), sdf.parse(endDate)).stream()
                 .filter(movement -> movement.getCuenta().getClienteId()==clientId ).toList();
 
         List<ReporteDTO> reportList = new ArrayList<>();
         movementFiltered.stream().forEach(movement->{
 
-        	 ClienteDTO cliente = clientServiceFeignClient.obtenerClientePorId(clientId);
+        	 ClienteDTO cliente = clientServiceFeignClient.obtenerClientePorId(clientId).getClienteDTO();
              ReporteDTO reportDto = ReporteDTO.builder()
                     .movimientoFecha(movement.getFecha())
                     .cliente(cliente.getNombre())

@@ -2,6 +2,7 @@ package com.manager.service;
 
 import com.manager.dto.CuentaDTO;
 import com.manager.dto.Response;
+import com.manager.dto.ResponseCliente;
 import com.manager.dto.ResponseCuenta;
 
 public interface ICuentaService {
@@ -21,6 +22,8 @@ public interface ICuentaService {
 	public Response eliminar(Long cuentaid);
 
 	public ResponseCuenta obtenerTodas();
+	
+	public ResponseCliente obtenerTodosClientes();
 
 	
 	

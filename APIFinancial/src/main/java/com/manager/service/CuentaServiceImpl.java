@@ -2,7 +2,7 @@ package com.manager.service;
 
 import java.beans.PropertyDescriptor;
 
-import org.apache.tomcat.util.bcel.Const;
+
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.BeanWrapper;
@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import com.manager.dto.ClienteDTO;
 import com.manager.dto.CuentaDTO;
 import com.manager.dto.Response;
+import com.manager.dto.ResponseCliente;
 import com.manager.dto.ResponseCuenta;
 import com.manager.integration.ClienteFeignClient;
 import com.manager.model.Cuenta;
@@ -37,12 +38,23 @@ public class CuentaServiceImpl implements ICuentaService {
 		Cuenta cuenta = cuentaRep.findById(cuentaId).orElseThrow(() ->
 		new IllegalArgumentException("Cuenta no encontrada con id: " + cuentaId));;
         
-        ClienteDTO cliente = clienteFeignClient.obtenerClientePorId(cuenta.getClienteId());
+        ResponseCliente rcliente = clienteFeignClient.obtenerClientePorId(cuenta.getClienteId());
         CuentaDTO cuentaConCliente = new CuentaDTO();
         modelMapper.map(cuentaConCliente, cuenta);
-        cuentaConCliente.setClienteDTO(cliente);
+        cuentaConCliente.setClienteDTO(rcliente.getClienteDTO());
         return cuentaConCliente;
     }
+    
+    @Override
+	public ResponseCliente obtenerTodosClientes() {
+    	 ResponseCliente rcliente = clienteFeignClient.obtenerClientes();
+    	 if(rcliente.getClienteList().isEmpty()) {
+    		 rcliente = new ResponseCliente();
+    		 rcliente.setCode(Constants.NOT_FOUND);
+    		 rcliente.setMessage(Constants.NOT_FOUND_MSG);
+    	 }
+		return rcliente;
+	}
 
 	@Override
 	public Response crear(CuentaDTO cuentaDTO) {
@@ -63,7 +75,7 @@ public class CuentaServiceImpl implements ICuentaService {
 			cuenta = cuentaRep.findByClienteId(cuentaActualizadoDTO.getIdCliente())
 					.orElseThrow(() -> new IllegalArgumentException("Cuenta no encontrada con identificacion: " + cuentaActualizadoDTO.getIdCliente()));
 		}else if(cuentaActualizadoDTO.getCliente()!= null){
-			ClienteDTO cliente = clienteFeignClient.obtenerClientePorNombre(cuentaActualizadoDTO.getCliente());
+			ClienteDTO cliente = clienteFeignClient.obtenerClientePorNombre(cuentaActualizadoDTO.getCliente()).getClienteDTO();
 			cuenta = cuentaRep.findByClienteId(cliente.getId())
 					.orElseThrow(() -> new IllegalArgumentException("Cuenta no encontrada con identificacion: " + cuentaActualizadoDTO.getCliente()));
 		}else{
@@ -86,7 +98,7 @@ public class CuentaServiceImpl implements ICuentaService {
 			cuenta = cuentaRep.findByClienteId(cuentaActualizadoDTO.getIdCliente())
 					.orElseThrow(() -> new IllegalArgumentException("Cuenta no encontrada con identificacion: " + cuentaActualizadoDTO.getIdCliente()));
 		}else if(cuentaActualizadoDTO.getCliente()!= null){
-			ClienteDTO cliente = clienteFeignClient.obtenerClientePorNombre(cuentaActualizadoDTO.getCliente());
+			ClienteDTO cliente = clienteFeignClient.obtenerClientePorNombre(cuentaActualizadoDTO.getCliente()).getClienteDTO();
 			cuenta = cuentaRep.findByClienteId(cliente.getId())
 					.orElseThrow(() -> new IllegalArgumentException("Cuenta no encontrada con identificacion: " + cuentaActualizadoDTO.getCliente()));
 		}else{
@@ -127,7 +139,7 @@ public class CuentaServiceImpl implements ICuentaService {
 	public ResponseCuenta obtenerCuentaConCliente(Integer clienteId) {
 		Cuenta cuenta = cuentaRep.findByClienteId(clienteId)
 		        .orElseThrow(() -> new IllegalArgumentException("Cuenta no encontrada para el cliente id: " + clienteId));
-		ClienteDTO cliente = clienteFeignClient.obtenerClientePorId(clienteId);
+		ClienteDTO cliente = clienteFeignClient.obtenerClientePorId(clienteId).getClienteDTO();
 		CuentaDTO cuentaDTO = new CuentaDTO();
 		cuentaDTO.setClienteDTO(cliente);
 		cuentaDTO.setCliente(cliente.getNombre());
@@ -157,7 +169,7 @@ public class CuentaServiceImpl implements ICuentaService {
 		response.setCuentaList(cuentas);
 		if(cuentas.isEmpty()) {
 			response.setCode(Constants.NOT_FOUND);
-			response.setMessage(Constants.NOT_FOUND);
+			response.setMessage(Constants.NOT_FOUND_MSG);
 		}else{
 			response.setCode(Constants.FOUND);
 			response.setMessage(Constants.FOUND_MSG);
@@ -181,4 +193,6 @@ public class CuentaServiceImpl implements ICuentaService {
         String[] result = new String[emptyNames.size()];
         return emptyNames.toArray(result);
     }
+
+	
 }

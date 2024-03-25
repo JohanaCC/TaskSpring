@@ -1,8 +1,6 @@
 package com.manager.controller;
 
 import java.text.ParseException;
-import java.util.Date;
-import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,14 +13,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 
 import com.manager.dto.ResponseReport;
-import com.manager.service.ReporteServiceImpl;
+import com.manager.service.IReporteService;
 
 @RestController
 @RequestMapping("/reports")
 public class ReportController {
 
     @Autowired
-    private ReporteServiceImpl reportService;
+    private IReporteService reportService;
 
     @GetMapping
     public ResponseEntity<ResponseReport> getReport(@RequestParam(value = "startDate") String startDate,

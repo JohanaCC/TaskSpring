@@ -18,7 +18,7 @@ public interface IMovimientoRep extends JpaRepository<Movimiento, Long> {
 	
 	List<Movimiento> findByTipoMovimiento(String tipoMovimiento);
 	
-	List<Movimiento> findByCuenta(Long cuenta);
+	List<Movimiento> findByCuentaId(Long cuenta);
 
 	@Query("SELECT m FROM Movimiento m WHERE m.cuenta = :cuenta ORDER BY m.fecha DESC, m.id DESC")
     Optional<Movimiento> findTopByCuentaOrderByFechaDescIdDesc(Long cuenta);
@@ -26,5 +26,5 @@ public interface IMovimientoRep extends JpaRepository<Movimiento, Long> {
 	@Query(value =  "SELECT * FROM movimiento WHERE cuenta_id = :cuentaId ORDER BY fecha DESC, id DESC LIMIT 1", nativeQuery = true)
 	Optional<Movimiento> findLastMovimientoByCuentaId(Long cuentaId);
 	
-	List<Movimiento> findByDateBetween(Date startDate, Date endDate);
+	List<Movimiento> findByFechaBetween(Date startDate, Date endDate);
 }

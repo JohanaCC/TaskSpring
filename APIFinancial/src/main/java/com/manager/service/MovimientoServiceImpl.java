@@ -115,7 +115,7 @@ public class MovimientoServiceImpl implements IMovimientoService {
 	
 	@Override
 	public ResponseMovimiento getByCuenta(Long idCuenta) {
-		List<MovimientoDTO> movimientos = movimientoRep.findByCuenta(idCuenta).stream()
+		List<MovimientoDTO> movimientos = movimientoRep.findByCuentaId(idCuenta).stream()
 		        .map(movimiento -> modelMapper.map(movimiento, MovimientoDTO.class))
 		        .collect(Collectors.toList());
 		ResponseMovimiento response = new ResponseMovimiento();

@@ -55,9 +55,6 @@ dependencyManagement {
 	}
 }
 
-tasks.named('test') {
-	useJUnitPlatform()
-}
 
 bootJar {
     archiveFileName = 'manager-financial.jar'
