@@ -50,8 +50,8 @@ public class CuentaServiceImpl implements ICuentaService {
     	 ResponseCliente rcliente = clienteFeignClient.obtenerClientes();
     	 if(rcliente.getClienteList().isEmpty()) {
     		 rcliente = new ResponseCliente();
-    		 rcliente.setCode(Constants.NOT_FOUND);
-    		 rcliente.setMessage(Constants.NOT_FOUND_MSG);
+    		 rcliente.setCodigo(Constants.NOT_FOUND);
+    		 rcliente.setMensaje(Constants.NOT_FOUND_MSG);
     	 }
 		return rcliente;
 	}
@@ -129,8 +129,8 @@ public class CuentaServiceImpl implements ICuentaService {
 		CuentaDTO cuentaDTO = new CuentaDTO();
 		modelMapper.map(cuenta, cuentaDTO);
 		ResponseCuenta response = new ResponseCuenta();
-		response.setCode(Constants.FOUND);
-		response.setMessage(Constants.FOUND_MSG);
+		response.setCodigo(Constants.FOUND);
+		response.setMensaje(Constants.FOUND_MSG);
 		response.setCuenta(cuentaDTO);
 		return response;
 	}
@@ -145,8 +145,8 @@ public class CuentaServiceImpl implements ICuentaService {
 		cuentaDTO.setCliente(cliente.getNombre());
 		modelMapper.map(cuenta, cuentaDTO);
 		ResponseCuenta response = new ResponseCuenta();
-		response.setCode(Constants.FOUND);
-		response.setMessage(Constants.FOUND_MSG);
+		response.setCodigo(Constants.FOUND);
+		response.setMensaje(Constants.FOUND_MSG);
 		response.setCuenta(cuentaDTO);
 		return response;
 	}
@@ -168,11 +168,11 @@ public class CuentaServiceImpl implements ICuentaService {
 		ResponseCuenta response = new ResponseCuenta();
 		response.setCuentaList(cuentas);
 		if(cuentas.isEmpty()) {
-			response.setCode(Constants.NOT_FOUND);
-			response.setMessage(Constants.NOT_FOUND_MSG);
+			response.setCodigo(Constants.NOT_FOUND);
+			response.setMensaje(Constants.NOT_FOUND_MSG);
 		}else{
-			response.setCode(Constants.FOUND);
-			response.setMessage(Constants.FOUND_MSG);
+			response.setCodigo(Constants.FOUND);
+			response.setMensaje(Constants.FOUND_MSG);
 		}
 		return response;
 	}

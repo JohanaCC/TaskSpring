@@ -104,11 +104,11 @@ public class MovimientoServiceImpl implements IMovimientoService {
 		ResponseMovimiento response = new ResponseMovimiento();
 		response.setMovimientoList(movimientos);
 		if(movimientos.isEmpty()) {
-			response.setCode(Constants.NOT_FOUND);
-			response.setMessage(Constants.NOT_FOUND);
+			response.setCodigo(Constants.NOT_FOUND);
+			response.setMensaje(Constants.NOT_FOUND);
 		}else{
-			response.setCode(Constants.FOUND);
-			response.setMessage(Constants.FOUND_MSG);
+			response.setCodigo(Constants.FOUND);
+			response.setMensaje(Constants.FOUND_MSG);
 		}
 		return response;
 	}
@@ -121,11 +121,11 @@ public class MovimientoServiceImpl implements IMovimientoService {
 		ResponseMovimiento response = new ResponseMovimiento();
 		response.setMovimientoList(movimientos);
 		if(movimientos.isEmpty()) {
-			response.setCode(Constants.NOT_FOUND);
-			response.setMessage(Constants.NOT_FOUND);
+			response.setCodigo(Constants.NOT_FOUND);
+			response.setMensaje(Constants.NOT_FOUND);
 		}else{
-			response.setCode(Constants.FOUND);
-			response.setMessage(Constants.FOUND_MSG);
+			response.setCodigo(Constants.FOUND);
+			response.setMensaje(Constants.FOUND_MSG);
 		}
 		return response;
 	}

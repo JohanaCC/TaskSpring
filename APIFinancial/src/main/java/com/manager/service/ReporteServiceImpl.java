@@ -50,8 +50,8 @@ public class ReporteServiceImpl implements IReporteService {
                     .build();
             reportList.add(reportDto);
         });
-        response.setCode(Constants.OK);
-        response.setMessage(Constants.OK_MSG);
+        response.setCodigo(Constants.OK);
+        response.setMensaje(Constants.OK_MSG);
         response.setReportList(reportList);
 
         return response;
