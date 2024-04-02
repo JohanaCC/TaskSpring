@@ -11,13 +11,13 @@ import lombok.ToString;
 @ToString
 @EqualsAndHashCode
 public class Response {
-	private String code;
-	private String message;
+	private String codigo;
+	private String mensaje;
 	
 	public Response(String code, String message) {
 		super();
-		this.code = code;
-		this.message = message;
+		this.codigo = code;
+		this.mensaje = message;
 	}
 
 }

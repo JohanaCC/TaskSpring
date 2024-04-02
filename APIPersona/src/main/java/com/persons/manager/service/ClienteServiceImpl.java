@@ -22,7 +22,6 @@ import com.persons.manager.util.Constants;
 import jakarta.transaction.Transactional;
 
 
-
 @Service
 public class ClienteServiceImpl implements IClienteService {
 	
@@ -133,11 +132,11 @@ public class ClienteServiceImpl implements IClienteService {
 		ResponseCliente response = new ResponseCliente();
 		response.setClienteList(clientes);
 		if(clientes.size()>0) {
-			response.setCode(Constants.FOUND);
-			response.setMessage(Constants.FOUND_MSG);
+			response.setCodigo(Constants.FOUND);
+			response.setMensaje(Constants.FOUND_MSG);
 		}else{
-			response.setCode(Constants.NOT_FOUND);
-			response.setMessage(Constants.NOT_FOUND_MSG);
+			response.setCodigo(Constants.NOT_FOUND);
+			response.setMensaje(Constants.NOT_FOUND_MSG);
 		}
 		return response;
 	}
@@ -150,8 +149,8 @@ public class ClienteServiceImpl implements IClienteService {
 		modelMapper.map(cliente, clienteDTO);
 		ResponseCliente response = new ResponseCliente();
 		response.setClienteDTO(clienteDTO);
-		response.setCode(Constants.FOUND);
-		response.setMessage(Constants.FOUND_MSG);
+		response.setCodigo(Constants.FOUND);
+		response.setMensaje(Constants.FOUND_MSG);
 		return response;
 	}
 
@@ -164,11 +163,11 @@ public class ClienteServiceImpl implements IClienteService {
 		response.setClienteList(clientes);
 		if(clientes.size()>0) {
 			response.setClienteDTO(clientes.get(0));
-			response.setCode(Constants.FOUND);
-			response.setMessage(Constants.FOUND_MSG);
+			response.setCodigo(Constants.FOUND);
+			response.setMensaje(Constants.FOUND_MSG);
 		}else{
-			response.setCode(Constants.NOT_FOUND);
-			response.setMessage(Constants.NOT_FOUND);
+			response.setCodigo(Constants.NOT_FOUND);
+			response.setMensaje(Constants.NOT_FOUND);
 		}
 		return response;
 	}
