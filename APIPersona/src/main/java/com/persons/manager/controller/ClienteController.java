@@ -5,6 +5,8 @@ import com.persons.manager.dto.Response;
 import com.persons.manager.dto.ResponseCliente;
 import com.persons.manager.service.IClienteService;
 
+import jakarta.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,8 +26,8 @@ public class ClienteController {
     }
     
     @PostMapping
-    public ResponseEntity<Response> crearCliente(@RequestBody ClienteDTO Cliente) {
-        return new ResponseEntity<Response>(clienteService.crear(Cliente), HttpStatus.OK);
+    public ResponseEntity<Response> crearCliente(@Valid @RequestBody ClienteDTO cliente) {
+        return new ResponseEntity<Response>(clienteService.crear(cliente), HttpStatus.OK);
     }
 
     @PutMapping
