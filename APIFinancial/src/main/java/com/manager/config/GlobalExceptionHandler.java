@@ -15,7 +15,7 @@ public class GlobalExceptionHandler {
     
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ResponseEntity<Response> handleHttpMessageNotReadable(HttpMessageNotReadableException ex) {
-        Response response = new Response(Constants.WRONG_FORMAT, Constants.WRONG_FORMAT_MSG);
+        Response response = new Response(Constants.WRONG_FORMAT, Constants.WRONG_FORMAT_MSG+" "+ex.getMessage() );
         return ResponseEntity.badRequest().body(response);
     }
     
@@ -26,8 +26,8 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(value = RuntimeException.class)
-    public ResponseEntity<Response> runtimeExceptionHandler(RuntimeException exception){
-    	Response error = new Response(Constants.INTERNAL_ERROR_SERVER,exception.getMessage());
+    public ResponseEntity<Response> runtimeExceptionHandler(RuntimeException ex){
+    	Response error = new Response(Constants.INTERNAL_ERROR_SERVER,ex.getMessage());
     	return new ResponseEntity<>(error, HttpStatus.ACCEPTED);
     }
     

@@ -31,7 +31,8 @@ public class Movimiento {
 	private Date fecha;
 	
 	@Column(name = "tipo")
-	private String tipoMovimiento;
+	@Enumerated(EnumType.STRING)
+	private TipoMovimiento tipoMovimiento;
 	
 	private Double valor;
 	
@@ -43,5 +44,9 @@ public class Movimiento {
 	
 	private Boolean estado;
 	
-	 
+	
+	public enum TipoMovimiento {
+        DEPOSITO,
+        RETIRO,
+    }
 }

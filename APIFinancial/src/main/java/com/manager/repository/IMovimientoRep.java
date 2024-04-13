@@ -23,7 +23,7 @@ public interface IMovimientoRep extends JpaRepository<Movimiento, Long> {
 	@Query("SELECT m FROM Movimiento m WHERE m.cuenta = :cuenta ORDER BY m.fecha DESC, m.id DESC")
     Optional<Movimiento> findTopByCuentaOrderByFechaDescIdDesc(Long cuenta);
 	
-	@Query(value =  "SELECT * FROM movimiento WHERE cuenta_id = :cuentaId ORDER BY fecha DESC, id DESC LIMIT 1", nativeQuery = true)
+	@Query(value =  "SELECT * FROM movimiento WHERE cuenta_id = :cuentaId AND estado = true ORDER BY fecha DESC, id DESC LIMIT 1", nativeQuery = true)
 	Optional<Movimiento> findLastMovimientoByCuentaId(Long cuentaId);
 	
 	List<Movimiento> findByFechaBetween(Date startDate, Date endDate);

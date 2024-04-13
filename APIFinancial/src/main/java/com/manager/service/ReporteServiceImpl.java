@@ -2,6 +2,10 @@ package com.manager.service;
 
 import java.text.ParseException;
 import java.util.List;
+
+import org.modelmapper.ModelMapper;
+import org.modelmapper.TypeToken;
+import java.lang.reflect.Type;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -9,6 +13,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 import com.manager.dto.ClienteDTO;
+import com.manager.dto.MovimientoDTO;
 import com.manager.dto.ReporteDTO;
 import com.manager.dto.ResponseReport;
 import com.manager.integration.ClienteFeignClient;
@@ -24,15 +29,20 @@ public class ReporteServiceImpl implements IReporteService {
 
     @Autowired
     private ClienteFeignClient clientServiceFeignClient;
+    
+    @Autowired
+    private ModelMapper modelMapper;
 
     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
     @Override
-    public ResponseReport getReport(String startDate, String endDate, int clientId) throws ParseException {
+    public ResponseReport getReporte(String startDate, String endDate, int clientId) throws ParseException {
 
     	ResponseReport response = new ResponseReport();
         List<Movimiento> movementFiltered = movimienteRep.findByFechaBetween(sdf.parse(startDate), sdf.parse(endDate)).stream()
                 .filter(movement -> movement.getCuenta().getClienteId()==clientId ).toList();
+        Type listType = new TypeToken<List<Movimiento>>() {}.getType();
+        List<MovimientoDTO> movimientoDTOList = modelMapper.map(movementFiltered, listType);
 
         List<ReporteDTO> reportList = new ArrayList<>();
         movementFiltered.stream().forEach(movement->{

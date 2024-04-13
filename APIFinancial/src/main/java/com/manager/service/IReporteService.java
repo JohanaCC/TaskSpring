@@ -4,6 +4,6 @@ import com.manager.dto.ResponseReport;
 
 public interface IReporteService {
 
-	public ResponseReport getReport(String startDate, String endDate, int clientId) throws ParseException;
+	public ResponseReport getReporte(String startDate, String endDate, int clientId) throws ParseException;
 
 }

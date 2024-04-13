@@ -16,7 +16,7 @@ import com.manager.dto.ResponseReport;
 import com.manager.service.IReporteService;
 
 @RestController
-@RequestMapping("/reports")
+@RequestMapping("/movimientos/reports")
 public class ReportController {
 
     @Autowired
@@ -28,7 +28,7 @@ public class ReportController {
                                      @RequestParam(value = "clientId") int clientId)
                                     		 throws ParseException {
     	 return new ResponseEntity<ResponseReport>(
-    			 reportService.getReport(startDate,endDate, clientId), HttpStatus.OK);
+    			 reportService.getReporte(startDate,endDate, clientId), HttpStatus.OK);
     }
 
 }	

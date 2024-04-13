@@ -12,7 +12,9 @@ import org.springframework.stereotype.Service;
 import com.manager.dto.MovimientoDTO;
 import com.manager.dto.Response;
 import com.manager.dto.ResponseMovimiento;
+import com.manager.model.Cuenta;
 import com.manager.model.Movimiento;
+import com.manager.repository.ICuentaRep;
 import com.manager.repository.IMovimientoRep;
 import com.manager.util.Constants;
 
@@ -27,6 +29,8 @@ public class MovimientoServiceImpl implements IMovimientoService {
     
     @Autowired
 	private IMovimientoRep movimientoRep;
+    @Autowired
+	private ICuentaRep cuentaRep;
 	
 	@Autowired
     private ModelMapper modelMapper;
@@ -35,17 +39,19 @@ public class MovimientoServiceImpl implements IMovimientoService {
 	public Response crear(MovimientoDTO movimientoDTO) {
 		Response response = new Response();
 		Movimiento movimiento = new Movimiento();
-		/*CONTROLA SALDOS DE LA CUENTA*/	
-		MovimientoDTO movimientValido = controlarSaldo(movimientoDTO);
-		if(movimientValido.getEstado()) {
-			response = new Response(Constants.CREATE, Constants.CREATE_MSG);
 			
+		MovimientoDTO movimientValido = controlarSaldo(movimientoDTO);
+		
+		if(movimientValido.getEstado()) {
+			Cuenta cuenta = cuentaRep.findById(movimientoDTO.getCuenta().getId()).get();
+			modelMapper.map(movimientoDTO, movimiento);
+			movimiento.setCuenta(cuenta);
+			movimientoRep.save(movimiento);
+			response = new Response(Constants.CREATE, Constants.CREATE_MSG);
 		}else {
 			response = new Response(Constants.NOT_BALANCE, Constants.NOT_BALANCE_MSG);
 		}
-		modelMapper.map(movimientoDTO, movimiento);
 		
-		movimientoRep.save(movimiento);
 		return response;
 	}
 	
@@ -54,9 +60,9 @@ public class MovimientoServiceImpl implements IMovimientoService {
 	public Response actualizarUltimoMovimiento(MovimientoDTO movimientoActualizadoDTO, int tipo) {
 		Response response = new Response();
     	Movimiento ultimoMovimiento = new Movimiento();
-		if (movimientoActualizadoDTO.getIdCuenta()!= null){
+		if (movimientoActualizadoDTO.getCuenta().getId()!= null){
 			ultimoMovimiento = movimientoRep
-					.findLastMovimientoByCuentaId(movimientoActualizadoDTO.getIdCuenta())
+					.findLastMovimientoByCuentaId(movimientoActualizadoDTO.getCuenta().getId())
 					.orElseThrow(() -> new IllegalArgumentException("Debe indicar el ID de la CUENTA a modificar"));
 			if ((movimientoActualizadoDTO.getId()!=null && ultimoMovimiento.getId()!= movimientoActualizadoDTO.getId())
 					|| movimientoActualizadoDTO.getFecha().before(ultimoMovimiento.getFecha())) {
@@ -105,7 +111,7 @@ public class MovimientoServiceImpl implements IMovimientoService {
 		response.setMovimientoList(movimientos);
 		if(movimientos.isEmpty()) {
 			response.setCodigo(Constants.NOT_FOUND);
-			response.setMensaje(Constants.NOT_FOUND);
+			response.setMensaje(Constants.NOT_FOUND_MSG);
 		}else{
 			response.setCodigo(Constants.FOUND);
 			response.setMensaje(Constants.FOUND_MSG);
@@ -122,7 +128,7 @@ public class MovimientoServiceImpl implements IMovimientoService {
 		response.setMovimientoList(movimientos);
 		if(movimientos.isEmpty()) {
 			response.setCodigo(Constants.NOT_FOUND);
-			response.setMensaje(Constants.NOT_FOUND);
+			response.setMensaje(Constants.NOT_FOUND_MSG);
 		}else{
 			response.setCodigo(Constants.FOUND);
 			response.setMensaje(Constants.FOUND_MSG);
@@ -148,21 +154,31 @@ public class MovimientoServiceImpl implements IMovimientoService {
     }
     
     private MovimientoDTO controlarSaldo(MovimientoDTO movimientoDTO) {	
+    	Long idCuenta = movimientoDTO.getCuenta().getId();
+    	if (idCuenta == null) {
+    	    throw new IllegalArgumentException("Debe indicar el ID de la CUENTA a modificar");
+    	}
+
     	Movimiento ultimoMovimiento = movimientoRep
-				.findLastMovimientoByCuentaId(movimientoDTO.getIdCuenta())
-				.orElseThrow(() -> new IllegalArgumentException("Debe indicar el ID de la CUENTA a modificar"));
-		
-		Double nuevoSaldo = movimientoDTO.getValor();
+    	        .findLastMovimientoByCuentaId(idCuenta)
+    	        .orElse(null);
+    	
+		Double nuevoSaldo = movimientoDTO.getValor() ;
+		Date fechaUltimoMovimiento = movimientoDTO.getFecha();
+		Double saldoInicial = 0.0 ;
     	if(ultimoMovimiento!=null) {
-			nuevoSaldo = 
-					ultimoMovimiento.getSaldo() + movimientoDTO.getValor();	
+			nuevoSaldo = ultimoMovimiento.getSaldo() + movimientoDTO.getValor();	
+			fechaUltimoMovimiento = ultimoMovimiento.getFecha();
+			saldoInicial = ultimoMovimiento.getSaldo();
 		}
+    	
     	//Controla saldo y fecha de movimiento
-    	if(nuevoSaldo <0 || ultimoMovimiento.getFecha().after(movimientoDTO.getFecha())) {
+    	if(nuevoSaldo <0 || fechaUltimoMovimiento.after(movimientoDTO.getFecha())) {
 			movimientoDTO.setEstado(false);
 		}else {
 			movimientoDTO.setSaldo(nuevoSaldo);
-			movimientoDTO.setSaldoAnterior(ultimoMovimiento.getSaldo());
+			movimientoDTO.setSaldoAnterior(saldoInicial);
+			movimientoDTO.setEstado(true);
 		}
     	return movimientoDTO;
     }    

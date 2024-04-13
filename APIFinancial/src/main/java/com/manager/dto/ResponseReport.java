@@ -8,5 +8,4 @@ import lombok.Data;
 public class ResponseReport extends Response{
 
 	private List<ReporteDTO> reportList;
-	private ReporteDTO report;
 }

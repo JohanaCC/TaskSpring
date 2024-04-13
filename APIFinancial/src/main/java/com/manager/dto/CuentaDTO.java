@@ -18,10 +18,9 @@ public class CuentaDTO {
     private TipoCuenta tipoCuenta;
     @NotNull
     private Double saldoInicial;
-	private Boolean estado;
+	private Boolean estado = true;
 	private ClienteDTO clienteDTO;
 	@NotNull
 	private Integer idCliente;
-	@NotNull
 	private String cliente;
 }

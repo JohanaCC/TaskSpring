@@ -8,10 +8,9 @@ import lombok.Data;
 @Data
 public class MovimientoDTO {
 	private Long id;
-	
-	private CuentaDTO cuenta;
 	@NotBlank
-	private Long idCuenta;
+	private CuentaDTO cuenta;
+	
 	@NotBlank
 	private Date fecha;
 	
